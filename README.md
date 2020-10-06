@@ -35,7 +35,13 @@ SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
 - Your command handler will be executed off of the main thread.
 - You can pass openDoor a notification title and a notification body for the persistent foreground notification of your backdoor
     - All background services require a persistent foreground notification since Android Oreo 8.0
-    
+## Ask a Question?
+- Use [Github issues](https://github.com/evilthreads669966/smsbackdoor/issues)
+- Send an email to evilthreads669966@gmail.com
+
+## Reporting issues
+Found a bug on a specific feature? Open an issue on [Github issues](https://github.com/evilthreads669966/smsbackdoor/issues)
+
 ## Contributing
 
 SMS Backdoor is released under the [Apache 2.0 license](https://github.com/evilthreads669966/SmsBackdoor/blob/master/LICENSE). If you would like to contribute
@@ -58,7 +64,6 @@ We use [GitHub issues](https://github.com/evilthreads669966/smsbackdoor/issues) 
 - If you find a bug please fill out an issue report. Provide as much information as possible.
 - If you think of a great idea please fill out an issue as a proposal for your idea.
 
-
 ### Code Conventions
 None of these is essential for a pull request, but they will all help.  They can also be
 added after the original pull request but before a merge.
@@ -74,6 +79,9 @@ added after the original pull request but before a merge.
 ### Working with the code
 If you don't have an IDE preference we would recommend that you use
 [Android Studio](https://developer.android.com/studio/)
+## Contributors
+This project exists thanks to all the people who contribute.
+<a href="https://github.com/evilthreads669966/smsbackdoor/graphs/contributors"><img src="https://opencollective.com/smsbackdoor/contributors.svg?width=890&button=false" /></a>
 ## License
 ```
 Copyright 2020 Chris Basinger
