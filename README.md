@@ -1,6 +1,6 @@
 [![Release](https://jitpack.io/v/evilthreads669966/smsbackdoor.svg)](https://jitpack.io/#evilthreads669966/smsbackdoor)&nbsp;&nbsp;[![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=plastic)](https://android-arsenal.com/api?level=23)
 # SMS Backdoor
-### An Android library that opens a persistent SMS backdoor for binary SMS messages with the ability to define your own remote commands.
+### An Android library that opens a persistent binary SMS backdoor with the ability to define your own remote command handler.
 
 ### User Instructions
 1. Add the maven repository to your project's build.gradle file
