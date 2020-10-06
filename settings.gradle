@@ -1,0 +1,3 @@
+include ':smsbackdoor'
+include ':app'
+rootProject.name = "SMS Backdoor"
