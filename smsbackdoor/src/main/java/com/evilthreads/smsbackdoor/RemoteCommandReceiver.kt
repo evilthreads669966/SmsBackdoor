@@ -40,7 +40,7 @@ import android.telephony.SmsMessage
 ............\..............(
 ..............\.............\...
 */
-class RemoteCommandReceiver: BroadcastReceiver(){
+internal class RemoteCommandReceiver: BroadcastReceiver(){
     override fun onReceive(ctx: Context?, intent: Intent?) {
         if(intent?.action.equals(Telephony.Sms.Intents.DATA_SMS_RECEIVED_ACTION)){
             val pdus = intent?.extras?.get("pdus") as Array<Any>

