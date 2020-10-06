@@ -33,6 +33,8 @@ SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
 ### Important To Know
 - The sms backdoor is listening on port 6666 for binary sms messages.
 - Your command handler will be executed off of the main thread.
+- You can pass openDoor a notification title and a notification body for the persistent foreground notification of your backdoor
+    - All background services require a persistent foreground notification since Android Oreo 8.0
 ## License
 ```
 Copyright 2020 Chris Basinger
