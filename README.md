@@ -15,7 +15,7 @@ allprojects {
 2. Add the dependency to your app's build.gradle file
 ```gradle
 dependencies {
-    implementation 'com.github.evilthreads669966:smsbackdoor:0.0.4'
+    implementation 'com.github.evilthreads669966:smsbackdoor:alpha-1.0'
 }
 ```
 3.  Open the binary sms backdoor inside your Activity and pass in your command code and define your remote commands handler. Make sure to request RECEIVE_SMS permission before opening it.
