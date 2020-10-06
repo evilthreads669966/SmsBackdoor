@@ -31,7 +31,7 @@ SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
 }
 ```
 ### Important To Know
-- The sms backdoor is using port 6666 for binary sms messages.
+- The sms backdoor is listening on port 6666 for binary sms messages.
 - Your command handler will be executed off of the main thread.
 ## License
 ```
