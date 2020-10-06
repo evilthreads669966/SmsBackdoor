@@ -32,7 +32,7 @@ dependencies {
     implementation 'com.github.evilthreads669966:bootlaces:1.0'
     implementation 'androidx.lifecycle:lifecycle-service:2.2.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
-    implementation 'com.github.evilthreads669966:wakescope:1.0'
+    implementation 'com.github.evilthreads669966:wakescope:1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
