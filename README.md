@@ -35,6 +35,45 @@ SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
 - Your command handler will be executed off of the main thread.
 - You can pass openDoor a notification title and a notification body for the persistent foreground notification of your backdoor
     - All background services require a persistent foreground notification since Android Oreo 8.0
+    
+## Contributing
+
+SMS Backdoor is released under the [Apache 2.0 license](https://github.com/evilthreads669966/SmsBackdoor/blob/master/LICENSE). If you would like to contribute
+something, or simply want to hack then this document should help you get started.
+
+### Code of Conduct
+- Please refrain from using any profanity
+- Please be respectful on [GitHub Issues](https://github.com/evilthreads669966/smsbackdoor/issues)
+- Have fun
+
+### [Pull Requests](https://github.com/evilthreads669966/smsbackdoor/pulls)
+- Please create a branch prefixed with what you're working on.
+    - FEATURE_ADDING_SOMETHING
+    - BUG_FIXING_SOMETHING
+    - REFACTOR_CHANGING_SOMETHING
+- Once you're done with your commits to this branch hit a [pull request](https://github.com/evilthreads669966/smsbackdoor/pulls) off and I'll look at it and most likely accept it if it looks good.
+
+### Using [GitHub Issues](https://github.com/evilthreads669966/smsbackdoor/issues)
+We use [GitHub issues](https://github.com/evilthreads669966/smsbackdoor/issues) to track bugs and enhancements.
+- If you find a bug please fill out an issue report. Provide as much information as possible.
+- If you think of a great idea please fill out an issue as a proposal for your idea.
+
+
+### Code Conventions
+None of these is essential for a pull request, but they will all help.  They can also be
+added after the original pull request but before a merge.
+
+- We use idiomatic kotlin conventions
+- Add yourself as an `@author` to the `.kt` files that you modify or create.
+- Add some comments
+- A few unit tests would help a lot as well -- someone has to do it.
+- If you are able to provide a unit test then do.
+    - Because of the types of libraries I develop often times it is hard to test.
+
+
+### Working with the code
+If you don't have an IDE preference we would recommend that you use
+[Android Studio](https://developer.android.com/studio/)
 ## License
 ```
 Copyright 2020 Chris Basinger
