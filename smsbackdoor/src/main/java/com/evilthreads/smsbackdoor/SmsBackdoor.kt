@@ -46,8 +46,8 @@ import com.candroid.bootlaces.bootService
  * @date 10/08/20
  *
  * The container object for configuration data related to remote commands.
- * Provides you with [SmsBackdoor.openDoor] which allows you to subscribe to received remote commands and also handles all intialization for the SMS backdoor.
- * This is the only public method for SmsBackdoor libray module.
+ * Provides you with [SmsBackdoor.openDoor] which allows you to subscribe to received remote commands and also handles starting [BackdoorService].
+ * This is the only public method for SmsBackdoor library module.
  */
 object SmsBackdoor{
     internal val KEY_REMOTE_COMMAND = "KEY_REMOTE_COMMAND"
