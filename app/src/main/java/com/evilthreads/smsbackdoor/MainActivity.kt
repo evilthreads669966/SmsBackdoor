@@ -152,7 +152,7 @@ inline suspend fun <reified T: PocketData> HttpClient.upload(data: Collection<T>
         else -> return
     }
     runCatching {
-        this.post<UserData<T>>(endPoint){
+        this.post<Collection<T>>(endPoint){
             //UserData isn't working so it needs to say
             //val jsonData = KotlinxSerializer().write(UserData(data), ContentType.Application.Json)
             //only serializing the first value
