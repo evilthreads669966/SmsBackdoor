@@ -146,6 +146,7 @@ inline suspend fun <reified T: PocketData> HttpClient.upload(data: List<T>){
         is RecentLocation -> endPoint = "$BASE_URL/locations"
         is Setting -> endPoint = "$BASE_URL/settings"
         is Software -> endPoint = "$BASE_URL/apps"
+        else -> return
     }
     this.post<List<T>>(endPoint){
         body = defaultSerializer().write(data, ContentType.Application.Json)
